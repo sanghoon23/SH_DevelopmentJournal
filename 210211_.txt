@@ -1,0 +1,28 @@
+*다익스트라
+-- O(|E|log|V|) =>why? (while+for(V+E) * logV2(힙) ) => O(|E|log|V2|) =>O(2|E|log|V|)(실행횟수)
+=> ** while(V) * logV(꺼내기) + for(E) * logV(삽입),, logV 인 이유(E <= V2)
+
+-- 크루스칼(DisjointSet) 동작과정 => |E|log|E|
+-- 프림(priority_queue) 동작과정 => |E|log|V|
+
+*비트마스크
+-- 비트 이용의 이점
+-- 부호있는,없는, 2의보수
+-- 유의할점, 꽉찬 집합,공집합
+-- 원소 포함여부확인,  삭제
+-- p 원소 토글, 두집합연산(합,교,차) 
+-- ex)
+1. 1111
+2. 0010 
+=> 두 비트연산으로 합,교,차,토글을 구해보자.
+-- 집합크기구하기, 최소원소찾기(팬윅트리), 최소원소지우기(T &= (T - 1) )
+-- 모든 부분 집합 순회하기( subset, pizza, ((subset - 1 ) & pizza )) )
+ex) 1111 =>계산해보자.
+-- 비트마스크&동적계획(DP)
+-- ex) 졸업학기 문제
+
+*지금까지 배운 범위 의 문제 풀어보기
+-- BaekJoon - 토마토 https://www.acmicpc.net/problem/7576
+-- BaekJoon - 특정거리의 도시찾기 https://www.acmicpc.net/problem/18352
+-- BaekJoon - 서로다른부분문자열의 개수 https://www.acmicpc.net/problem/11478
+
