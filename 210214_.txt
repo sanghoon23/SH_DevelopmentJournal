@@ -1,0 +1,49 @@
+@C++기초플러스 돌아보기
+
+*클래스의 개념 
+-- 정보은닉을위한 캡슐화
+-- 다형성, 가상함수
+-- 순수가상함수 => 추상클래스
+-- struct / union
+-- 가상함수 vtable, 동작과정
+-- 인스턴스
+-- this 포인터의 역할 => 호출규약 thisCall
+-- 단형성, 다형성
+
+-- 추상화,캡슐화,다형성,상속,재활용
+-- 데이터형, long, float 부동소수
+-- 접근제어, 데이터무결성
+-- 인라인 메서드
+-- 어떤객체의 멤버함수, 멤버변수 동작과정
+-- 생성자 => 명시적, 암시적 호출
+-- 디폴트 생성자 => 괄호사용여부
+-- 파괴자, 디폴트 파괴자
+-- 객체의 생성, 대입의 차이
+-- 복사, 대입 연산자의 차이
+-- const 멤버함수
+-- 객체 초기화 방식, TTest test = 3;  ( 특별형식 )
+-- 객체 배열, 디폴트 생성자
+-- 클래스 사용범위 상수, class 안의 const int 의 의미, 값을 저장할 기억공간
+=> 이로 인한 해결책?? static const int , Enum
+-- 전통 열거의 문제점, 해결책 enum class , enum class 자료형 설정
+
+*클래스의활용
+-- 연산자 오버로딩 & 규칙 & 제약
+-- 프랜드 함수,클래스,멤버함수
+-- A = B * 2.75=> A= B.operator*(2.75),, A = 2.75 * B 는 어떻게 표현되나??
+-- friend Time operator*(double A, const Time& B)
+-- opeartor<<,, ostream&operator<<(ostream& os, const Time& t) ... return os;
+ex) cout << x << y;
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+@알고리즘
+
+*문제 풀어보기
+-- BaekJoon 행성터널 https://www.acmicpc.net/problem/2887
+-- BaekJoon 저울 https://www.acmicpc.net/problem/10159
+-- BaekJoon 줄세우기 https://www.acmicpc.net/problem/2252
+
+
+*위상정렬에서 사이클이 발생했다는 의미는??
