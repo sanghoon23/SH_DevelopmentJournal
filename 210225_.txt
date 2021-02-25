@@ -1,0 +1,226 @@
+@C++ 기초플러스 
+
+-- strcpy 함수 문제점
+
+*string 클래스 정리
+
+int STRLEN(const char* In)
+{
+	int Ret = 0;
+	while (In[Ret] != 0) ++Ret; //==> 왜 != 0 인가??
+	return Ret;
+}
+
+char* STRCPY(char* Dest, const char* Input)
+{
+	int InputSize = STRLEN(Input);
+	for (int i = 0; i <= InputSize; ++i) //==>> 왜 <= 인가??
+		Dest[i] = Input[i];
+	return Dest;
+}
+
+char* STRCAT(char* Dest, const char* Input)
+{
+	int DSize = STRLEN(Dest), InputSize = STRLEN(Input);
+	for (int i = 0; i <= InputSize; ++i) //==>> 왜 <= 인가??
+		Dest[DSize + i] = Input[i];
+	return Dest;
+}
+
+#pragma region AClass
+
+class A
+{
+public:
+	A(const char* In);
+	~A();
+
+public:
+	A(const A& Input);
+	A& operator=(const A& Input);
+	A& operator=(const char* Input);
+	A operator+(const A& Input);
+	A operator+(const char* Input);
+	A& operator+=(const A& Input);
+
+	bool operator==(const A& Input);
+	char& operator[](int N) { return CH[N]; }
+	const char& operator[](int N) const { return CH[N]; }
+
+	friend ostream& operator<<(ostream& OS, const A& Input);
+	friend istream& operator>>(istream& OS, A& Input);
+
+public:
+	const char* Get_CSTR() const { return CH; }
+	int GetLength() const { return StrLength; }
+	void PrintVal();
+
+private:
+	char* CH;
+	int StrLength = 0;
+};
+
+A::A(const char* In)
+{
+	StrLength = STRLEN(In);
+	CH = new char[StrLength + 1];
+	for (int i = 0; i <= StrLength; ++i)
+		CH[i] = In[i];
+}
+
+A::~A()
+{
+	delete[] CH;
+}
+
+A::A(const A& Input)
+{
+	StrLength = STRLEN((Input.CH));
+	//StrLength = Input.StrLength;
+	CH = new char[StrLength + 1];
+	for (int i = 0; i <= StrLength; ++i) CH[i] = Input.CH[i];
+	printf("복사생성자호출!!\n");
+}
+
+A& A::operator=(const A& Input)
+{
+	//if(Input == *this) => ERROR why??
+	if (this == &Input) return *this;
+	delete[] CH;
+
+	StrLength = Input.StrLength;
+	CH = new char[StrLength + 1];
+	for (int i = 0; i <= StrLength; ++i) CH[i] = Input.CH[i];
+	printf("대입호출!! A\n");
+
+	return *this;
+}
+
+A& A::operator=(const char* Input)
+{
+	if(CH != nullptr) delete[] CH;
+
+	StrLength = STRLEN(Input);
+	CH = new char[StrLength + 1];
+	for (int i = 0; i <= StrLength; ++i) CH[i] = Input[i];
+	printf("대입호출!! constchar\n");
+
+	return *this;
+}
+
+A A::operator+(const A& Input)
+{
+	int N = StrLength, M = Input.StrLength;
+	char* Ret = new char[N + M + 1];
+	STRCPY(Ret, CH);
+	STRCAT(Ret, Input.CH);
+	//strcat_s(Ret, N + M + 1, Input.CH);
+	A RRet = A(Ret);
+	delete[] Ret;
+	return RRet;
+}
+
+A A::operator+(const char* Input)
+{
+	int InSize = STRLEN(Input);
+	char* NewVal = new char[StrLength + InSize + 1];
+	STRCPY(NewVal, CH);
+	STRCAT(NewVal, Input);
+	return A(NewVal);
+}
+
+A& A::operator+=(const A& Input)
+{
+	char* NewVal = new char[StrLength + Input.StrLength + 1];
+	STRCPY(NewVal, CH);
+	STRCAT(NewVal, Input.CH);
+	delete[] CH;
+	CH = NewVal;
+	StrLength += Input.StrLength;
+	return *this;
+}
+
+bool A::operator==(const A& Input)
+{
+	int N = StrLength, M = Input.StrLength;
+	if (N != M) return false;
+	for (int i = 0; i < StrLength; ++i)
+		if (CH[i] != Input[i]) return false;
+
+	return true;
+}
+
+ostream & operator<<(ostream & OS, const A & Input)
+{
+	for (int i = 0; i < Input.StrLength; ++i)
+		OS << Input[i];
+	return OS;
+}
+
+istream & operator>>(istream & IS, A & Output)
+{
+	char Input[1000];
+	IS >> Input;
+	Output = A(Input);
+	return IS;
+}
+
+void A::PrintVal()
+{
+	for (int i = 0; i < StrLength; ++i)
+		cout << CH[i];
+	printf("\n");
+}
+
+
+#pragma endregion
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+int main()
+{
+	A* AVal = new A("Abcdef");
+	A* BVal = new A("Bdd");
+
+	//A* CVal = AVal; ==> 이것의 의미는??
+	A* DVal = new A(*AVal);
+	DVal->PrintVal();
+
+	//@operator= AClass
+	//DVal = BVal; ==>> 이것의 의미는??
+	//DVal->operator=(*BVal);
+	*DVal = *BVal;
+	DVal->PrintVal();
+
+	//@operator= "Something"
+	(*DVal) = "Test";
+	DVal->PrintVal();
+
+	//@operator+= AClass
+	(*DVal) += (*AVal);
+	DVal->PrintVal();
+
+	//@operator+= "Something"
+	(*DVal) += "GogoSing";
+	DVal->PrintVal();
+
+	//@operator+ 
+	A PVal = (*AVal) + (*BVal);
+
+	//@operator== 
+	if (PVal == *DVal) cout << "OH Same!!\n";
+	else cout << "NO Same!!\n";
+	PVal = *DVal;
+	if (PVal == *DVal) cout << "OH Same!!\n";
+
+	//@cout, cin 
+	cout << PVal << '\n';
+	cin >> PVal;
+
+	delete AVal;
+	delete BVal;
+	delete DVal;
+
+	return 0;
+}
+```
