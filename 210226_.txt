@@ -1,0 +1,129 @@
+
+@C++ 기초플러스 돌아보기
+
+*템플릿
+-- 함수템플릿, 일반화서술, 정의하는방법, 정의생성
+-- 템플릿의 장점
+-- 컴파일러 함수 선택 우선순위
+-- 함수템플릿 특수화 => 명시적 특수화,
+```
+template<class T>
+T Plus(T A, T B)
+{ return A + B; }
+
+@명시적특수화
+template<> int Plus<int>(int A, int B)
+{ return A + B + 10; }
+
+@오래된 명시적특수화
+int Plus<int>(int A, int B)
+```
+-- 함수템플릿에서의 부분특수화 => 불가능, 무엇으로해결??, 그렇다면 우선순위는??
+-- 명시적특수화에서의 참조
+```
+//@Template - 모호한상황 =>명시적특수화 
+	int N1 = 10, N2 = 10; 
+	int& TT = Plus<int&>(N1, N2); //OK 
+	//int& TTT = Plus(N1, N2); //ERROR
+```
+-- 암시적 구체화, 명시적 구체화
+```
+template int Plus<int>(int A, int B)
+```
+-- 구체화란??
+-- 명시적구체화 시 컴파일 에러??
+
+-- 클래스 템플릿
+-- 클래스의정의 != 생성하는 방법
+-- 클래스 템플릿 설계의 유의사항 =>일반화프로그래밍
+-- 수식 매개변수
+-- 템플릿 재귀적, pair<int, int>, 디폴트형 매개변수
+-- 클래스 템플릿의 암시적구체화, 명시적구체화, 명시적특수화 , 부분적특수화
+
+-- 멤버 템플릿
+-- 매개변수 템플릿
+-- 템플릿 클래스와 friend
+
+-- typedef, template using, 
+-- decltype -> 타입추출, 명확한 선택
+=> 체크리스트, 후행반환형식, 
+
+-- auto => 값에 상응하는 타입 '추론'
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+*LValue , RValue
+-- 이동생성자란??, 무엇이 RValue 인가??
+-- 이동생성자는 왜 필요한가??
+-- 이동생성자, 이동대입
+-- 이동생성자 에서 주의할점
+
+-- C_String(210225, 어제만들어본) 에서의 MoveSementic 구현, 과정예상하기
+```
+A::A(A&& Input) 
+{ 
+	StrLength = Input.StrLength; 
+	CH = Input.CH; 
+	Input.CH = 0; 
+	Input.StrLength = 0; 
+}
+
+A& A::operator=(A&& Input) 
+{ 
+	StrLength = Input.StrLength; 
+	CH = Input.CH; 
+	Input.CH = nullptr; 
+	Input.StrLength = 0; 
+	return *this; 
+}
+
+//@이동생성자 
+	A* FVal = new A("Move"); 
+	A Move = A(FVal->GetChangeUpperVal_2()); 
+	Move.PrintVal(); 
+	(*FVal)[0] = 'T'; 
+	//@임시객체가 만들어지는 상황(생성된객체리턴) 
+	Move = A(FVal->GetChangeUpperVal_1()); 
+	Move.PrintVal(); 
+	//@임시객체가 만들어지는 상황(생성하면서 리턴) 
+	(*FVal)[0] = 'S'; 
+	Move = A(FVal->GetChangeUpperVal_2()); 
+	Move.PrintVal(); 
+	//@이동 대입 
+	A MoveVal("M"); 
+	MoveVal = FVal->GetChangeUpperVal_2(); 
+	MoveVal.PrintVal(); 
+	//@포인터의상황 - 포인터객제반환 
+	(*FVal)[0] = 'P'; 
+	A* MovePVal = FVal->GetChangeUpperVal_3(); 
+	MovePVal->PrintVal();
+
+```
+
+@알고리즘1(종만북)
+
+*완전탐색
+-- 재귀호출, 부분문제, 기저사례, 반복문을사용해 완전탐색과의 차이
+-- ex) 소풍 (2명씩 짝지어), DP로는??
+=> 특정형태를 갖는 답만 확인
+-- '최적화 문제' 
+1. n개의 원소중 r 개를 골라내는 방법의수, 
+2. n개의 사과중 r 개를 골라서 무게의 합 최대화하는 문제
+3. 가장 무거운 사과 가벼운 사과의 무게 차이 를 최소화하는 문제
+-- ex) 여행하는 외판원문제, 
+=> MST 와 차이점?? => 문제이해 ( 시작도시로 되돌아온다.  모든 정점이 연결되있다. )
+=> 프림 알고리즘?? 크루스칼알고리즘??
+=> 과연 완전탐색보다 효율적인가??, N <= 10
+
+-- ex) 시계맞추기 , 문제특성, 전체를 돌린다.
+-- 모든 순열만들기, 모든 조합만들기, 2n 가지 경우의수 만들기
+
+*탐욕법
+-- 그리디는 무엇인가??
+-- 언제쓰이는가?? , 메타휴리스틱 알고리즘
+-- ex) 회의실 예약 문제, 
+=> 탐욕적 선택 속성, 최적부분구조
+-- 왜 DP 로도 풀리는가??, 하지만 탐욕을 선택하는 이유는??
+-- ex) 출전순서 정하기, multiset<int>, lower_bound
+-- ex) 도시락데우기
+-- ex) 문자열합치기, 허프만코드
