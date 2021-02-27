@@ -1,0 +1,12 @@
+@알고리즘2 (종만북) , C++ 기초플러스 복습 하기
+
+-- 포인터배열, 배열포인터,  (*Arr+j )[i], *(Arr + j)[i], (*(Arr+j))[i]
+=>  (*Arr+j )[i], double 이라면??
+=>double Temp = (*Arr2 + j)[i]  => 여기서 ( *Arr2 + j ) 의 연산은 어떻게되나??
+=> Arr2 의 의미는??
+	double& RefTest1 = Arr2[0][0];
+	double& RefTest2 = Arr2[0]; //ERROR => why??
+	double& RefTest2 = *(Arr2[0]); //OK
+	double* PtrTest1 = Arr2; //ERROR
+	double(*PtrTest2)[2] = Arr2; //ERROR
+	double(*PtrTest2)[3] = Arr2; //OK
